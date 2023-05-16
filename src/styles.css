@@ -1,0 +1,42 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+.selection-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.view-styles {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  font-size: larger;
+  /* margin-top: 5px; */
+}
+
+.table-styles {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  /* margin-top: 5px; */
+}
+
+.margin-left-2 {
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.padding-right {
+  padding-right: 10px;
+}
+
+.submit-btn {
+  color: white;
+  background-color: blue;
+  border: none;
+  padding: 5px;
+  margin-left: 10px;
+}
