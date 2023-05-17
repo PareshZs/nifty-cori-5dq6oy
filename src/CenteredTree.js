@@ -2,68 +2,6 @@ import React from "react";
 import Tree from "react-d3-tree";
 import { viewData } from "./data";
 
-// const tableData = [
-//   {
-//     name: "Table",
-//     children: [
-//       {
-//         name: "Dev - Turbot zza",
-//         children: [
-//           {
-//             name: "FullAWS",
-//           },
-//         ],
-//       },
-//       {
-//         name: "Dev - Cloud Management zzb",
-//         children: [
-//           {
-//             name: "FullAWS",
-//           },
-//           {
-//             name: "Restrict",
-//           },
-//           {
-//             name: "FullAWS",
-//           },
-//         ],
-//       },
-//       {
-//         name: "Prod - AWS Organizations (Secondary) zze",
-//         children: [
-//           {
-//             name: "FullAWS",
-//           },
-//         ],
-//       },
-//       {
-//         name: "Dev - testing app zzh",
-//         children: [
-//           {
-//             name: "FullAWS",
-//           },
-//         ],
-//       },
-//       {
-//         name: "Dev - Cloud Security Monitoring zzk",
-//         children: [
-//           {
-//             name: "FullAWS",
-//           },
-//         ],
-//       },
-//       {
-//         name: "EC-Default Dev Collab zzg",
-//         children: [
-//           {
-//             name: "FullAWS",
-//           },
-//         ],
-//       },
-//     ],
-//   },
-// ];
-
 const tableData = [
   {
     name: "DIM.DIAGNOSIS",
@@ -172,26 +110,36 @@ const renderForeignObjectNode = ({
   nodeDatum,
   toggleNode,
   foreignObjectProps,
-}) => (
-  <g>
-    <circle r={15}></circle>
-    {/* `foreignObject` requires width & height to be explicitly set. */}
-    <foreignObject {...foreignObjectProps}>
-      <div style={{ border: "1px solid black", backgroundColor: "#dedede" }}>
-        <h3 style={{ textAlign: "center" }}>{nodeDatum.name}</h3>
-        {nodeDatum.children && (
-          <button style={{ width: "100%" }} onClick={toggleNode}>
-            {nodeDatum.__rd3t.collapsed ? "Expand" : "Collapse"}
-          </button>
-        )}
-      </div>
-    </foreignObject>
-  </g>
-);
+}) => {
+  let nodeName = nodeDatum.name;
+  let nameArray = nodeName.split(".");
+  let finalName = nameArray[1];
+  return (
+    <g>
+      <circle r={15}></circle>
+      {/* `foreignObject` requires width & height to be explicitly set. */}
+      <foreignObject {...foreignObjectProps}>
+        <div style={{ border: "1px solid black", backgroundColor: "#dedede" }}>
+          <h3 style={{ textAlign: "center" }}>{finalName}</h3>
+          {/* {nodeDatum.children && (
+            <button style={{ width: "100%" }} onClick={toggleNode}>
+              {nodeDatum.__rd3t.collapsed ? "Expand" : "Collapse"}
+            </button>
+          )} */}
+        </div>
+      </foreignObject>
+    </g>
+  );
+};
 
 export default class CenteredTree extends React.PureComponent {
   state = {};
   nodeSize = { x: 300, y: 200 };
+  foreignObjectProps = {
+    width: this.nodeSize.x,
+    height: this.nodeSize.y,
+    x: 20,
+  };
 
   componentDidMount() {
     const dimensions = this.treeContainer.getBoundingClientRect();
@@ -204,6 +152,7 @@ export default class CenteredTree extends React.PureComponent {
   }
 
   render() {
+    const foreignObjectProps = this.foreignObjectProps;
     return (
       <div style={containerStyles} ref={(tc) => (this.treeContainer = tc)}>
         <Tree
@@ -223,6 +172,9 @@ export default class CenteredTree extends React.PureComponent {
             console.log("onNodeClick", node);
           }}
           nodeSize={this.nodeSize}
+          renderCustomNodeElement={(rd3tProps) =>
+            renderForeignObjectNode({ ...rd3tProps, foreignObjectProps })
+          }
           translate={this.state.translate}
           orientation={"vertical"}
         />

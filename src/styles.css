@@ -40,3 +40,9 @@
   padding: 5px;
   margin-left: 10px;
 }
+
+.tooltip-styles {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
