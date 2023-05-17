@@ -1,8 +1,8 @@
 import "./styles.css";
 import CenteredTree from "./CenteredTree";
 import MainDropdown from "./MainDropdown";
-import { useState } from "react";
-import { APIService } from "./apiService";
+import { useEffect, useState } from "react";
+import { ViewAPIService } from "./apiService";
 
 export default function App() {
   const [optionValue, setOptionValue] = useState("");
@@ -29,6 +29,10 @@ export default function App() {
     console.log(tableTreeData);
     return tableTreeData;
   };
+
+  useEffect(() => {
+    getViewData();
+  }, [optionValue, viewInputName]);
 
   return (
     <div className="App">
