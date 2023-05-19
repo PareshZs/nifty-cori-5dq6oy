@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Tree from "react-d3-tree";
 import { viewData } from "./data";
+import Tooltip from "./TooltipComponent";
+import { useCenteredTree } from "./Helpers";
 
 const tableData = [
   {
@@ -102,11 +104,28 @@ const tableData = [
 ];
 
 const containerStyles = {
-  width: "100%",
+  width: "100vw",
   height: "100vh",
 };
 
-const renderForeignObjectNode = ({
+const handleNodeClick = (nodeDatum) => {
+  window.alert(
+    nodeDatum.children ? "Clicked a branch node" : "Clicked a leaf node."
+  );
+};
+
+const handleNodeOver = (nodeDatum) => {
+  console.log("Node Hovered");
+}
+
+const renderTooltip = (nodeName) => {
+  return(
+  <Tooltip content="Yee-haw!" direction="right">
+        
+  </Tooltip>
+  )
+}
+const renderNodeWithCustomEvents = ({
   nodeDatum,
   toggleNode,
   foreignObjectProps,
@@ -115,70 +134,73 @@ const renderForeignObjectNode = ({
   let nameArray = nodeName.split(".");
   let finalName = nameArray[1];
   return (
+    // <Tooltip content="Yee-haw!" direction="right">
     <g>
-      <circle r={15}></circle>
-      {/* `foreignObject` requires width & height to be explicitly set. */}
-      <foreignObject {...foreignObjectProps}>
-        <div style={{ border: "1px solid black", backgroundColor: "#dedede" }}>
-          <h3 style={{ textAlign: "center" }}>{finalName}</h3>
-          {/* {nodeDatum.children && (
-            <button style={{ width: "100%" }} onClick={toggleNode}>
-              {nodeDatum.__rd3t.collapsed ? "Expand" : "Collapse"}
-            </button>
-          )} */}
+      <circle r="15" onClick={() => handleNodeClick(nodeDatum)} 
+      // onPointerEnter={()=> console.log("Entered on the node")} 
+      />
+      <text  fill="black" strokeWidth="1" x="20" onClick={toggleNode}>
+      {/* {finalName} */}
+      
+        {finalName}
+      
+      </text>
+        
+      
+      {/* <Tooltip anchorSelect={`#${finalName}`}>
+        <div>
+          <h3>This is a very interesting header</h3>
+          <p>Here's some interesting stuff:</p>
+          <ul>
+            <li>Some</li>
+            <li>Interesting</li>
+            <li>Stuff</li>
+          </ul>
         </div>
-      </foreignObject>
+      </Tooltip> */}
     </g>
+    // </Tooltip>
   );
 };
 
-export default class CenteredTree extends React.PureComponent {
-  state = {};
-  nodeSize = { x: 300, y: 200 };
-  foreignObjectProps = {
-    width: this.nodeSize.x,
-    height: this.nodeSize.y,
-    x: 20,
+const CenteredTree = () => {
+  const [stateObj, setStateObj] = useState({})
+  const [translate, containerRef] = useCenteredTree();
+  const nodeSize = { x: 300, y: 200 };
+  const foreignObjectProps = {
+    width: nodeSize.x,
+    height: nodeSize.y,
+    x: -25,
+    y: -25
   };
 
-  componentDidMount() {
-    const dimensions = this.treeContainer.getBoundingClientRect();
-    this.setState({
-      translate: {
-        x: dimensions.width / 2,
-        y: dimensions.height / 2,
-      },
-    });
-  }
-
-  render() {
-    const foreignObjectProps = this.foreignObjectProps;
-    return (
-      <div style={containerStyles} ref={(tc) => (this.treeContainer = tc)}>
-        <Tree
-          data={
-            this?.props?.optionValue[0]?.label === "View" ? viewData : tableData
-          }
-          onLinkMouseOver={(tree) => {
-            console.log("onLinkMouseOver", tree);
-          }}
-          onLinkClick={(link) => {
-            console.log("onLinkClick", link);
-          }}
-          onNodeClick={(node) => {
-            console.log("onNodeClick", node);
-          }}
-          onNodeMouseOver={(node) => {
-            console.log("onNodeClick", node);
-          }}
-          nodeSize={this.nodeSize}
-          renderCustomNodeElement={(rd3tProps) =>
-            renderForeignObjectNode({ ...rd3tProps, foreignObjectProps })
-          }
-          translate={this.state.translate}
-          orientation={"vertical"}
-        />
-      </div>
-    );
-  }
+  return (
+    <div style={containerStyles} ref={containerRef}>
+      <Tree
+        data={
+          this?.props?.optionValue[0]?.label === "View" ? viewData : tableData
+        }
+        onLinkMouseOver={(tree) => {
+          renderTooltip(tree?.data.name);
+        }}
+        onLinkClick={(link) => {
+          console.log("onLinkClick", link?.data.name);
+        }}
+        onNodeClick={(node) => {
+          console.log("onNodeClick", node);
+        }}
+        onNodeMouseOver={(node) => {
+          console.log("onNodeMouseOver", node);
+        }}
+        nodeSize={nodeSize}
+        renderCustomNodeElement={(rd3tProps) =>
+          renderNodeWithCustomEvents({ ...rd3tProps, handleNodeClick})
+        }
+        translate={translate}
+        orientation={"vertical"}
+      />
+    </div>
+  );
 }
+
+export default CenteredTree;

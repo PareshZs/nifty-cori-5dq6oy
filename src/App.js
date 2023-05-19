@@ -1,8 +1,9 @@
 import "./styles.css";
-import CenteredTree from "./CenteredTree";
+// import CenteredTree from "./CenteredTree";
 import MainDropdown from "./MainDropdown";
 import { useEffect, useState } from "react";
 import { ViewAPIService } from "./apiService";
+// import HighTree from "./HighTree"
 
 export default function App() {
   const [optionValue, setOptionValue] = useState("");
@@ -30,9 +31,9 @@ export default function App() {
     return tableTreeData;
   };
 
-  useEffect(() => {
-    getViewData();
-  }, [optionValue, viewInputName]);
+  // useEffect(() => {
+  //   getViewData();
+  // }, [optionValue, viewInputName]);
 
   return (
     <div className="App">
@@ -50,14 +51,16 @@ export default function App() {
         type={type}
         setType={setType}
       />
-      {optionValue[0]?.label === "View" && viewInputName && type === "V" && (
+      {/* {optionValue[0]?.label === "View" && viewInputName && type === "V" && (
         <CenteredTree optionValue={optionValue} />
       )}
       {optionValue[0]?.label === "Table" &&
         tableInputName &&
         tableInputNumber &&
         selectedTableValue &&
-        type === "T" && <CenteredTree optionValue={optionValue} />}
-    </div>
+        type === "T" && <CenteredTree optionValue={optionValue} />} */}
+
+        {/* <HighTree/> */}
+      </div>
   );
 }
