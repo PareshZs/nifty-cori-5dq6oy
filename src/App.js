@@ -3,6 +3,7 @@ import "./styles.css";
 import MainDropdown from "./MainDropdown";
 import { useEffect, useState } from "react";
 import { ViewAPIService } from "./apiService";
+import AntDChart from "./AntDChart";
 // import HighTree from "./HighTree"
 
 export default function App() {
@@ -61,6 +62,7 @@ export default function App() {
         type === "T" && <CenteredTree optionValue={optionValue} />} */}
 
         {/* <HighTree/> */}
+        <AntDChart/>
       </div>
   );
 }
