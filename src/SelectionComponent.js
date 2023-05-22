@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Input } from 'antd';
 import Select from "react-dropdown-select";
 
 const options = [
@@ -31,7 +32,7 @@ const SelectionComponent = (props) => {
     <div className={"selection-wrapp"}>
       {selectedOption[0]?.label === "View" ? (
         <div className={"view-styles"}>
-          <input
+          <Input
             value={viewInputName}
             type={"text"}
             onChange={(e) => setViewInputName(e.target.value)}

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Select from "react-dropdown-select";
 import SelectionComponent from "./SelectionComponent";
+import { Col, Row } from 'antd';
 const options = [
   {
     value: 1,
@@ -30,12 +31,17 @@ const MainDropdown = (props) => {
   } = props;
   return (
     <div className={"selection-wrapper"}>
+      <Row>
+        <Col>
       <Select
         options={options}
         onChange={(values) => setOptionValue(values)}
         className={"padding-right"}
       />
-      <SelectionComponent
+      </Col>
+      <Col>
+      
+        <SelectionComponent
         selectedOption={optionValue}
         viewInputName={viewInputName}
         setViewInputName={setViewInputName}
@@ -48,6 +54,8 @@ const MainDropdown = (props) => {
         type={type}
         setType={setType}
       />
+        </Col>
+      </Row>
     </div>
   );
 };
